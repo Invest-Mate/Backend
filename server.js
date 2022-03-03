@@ -20,7 +20,7 @@ app.use(
     })
 );
 app.use(morgan('dev'));
-//automatic reloading of routes
-// readdirSync('./routes').map((r) => app.use("/api", require(`./routes/${r}`)))
+// automatic reloading of routes
+readdirSync('./routes').map((r) => app.use("/api", require(`./routes/${r}`)))
 const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`Server listening on port ${port}`));

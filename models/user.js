@@ -12,17 +12,17 @@ const userSchema = new Schema({
             minlength: [10, "A user name must have more or equal then 10 characters"],
         },
         userId: {
-            type: ObjectId,
-            required: true,
+            type: Schema.ObjectId,
         },
         dob: {
-            type: Date.format("DD-MM-YYYY"),
+            type: String,
         },
         address: {
             type: String,
             required: true,
         },
         email: {
+            required: true,
             type: String,
             trim: true,
             unique: true,

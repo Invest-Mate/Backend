@@ -12,11 +12,11 @@ const fundSchema = new Schema({
             minlength: [10, "A fund name must have more or equal then 10 characters"],
         },
         fundId: {
-            type: ObjectId,
+            type: Schema.ObjectId,
             required: true,
         },
         createdBy: {
-            type: ObjectId,
+            type: Schema.ObjectId,
             required: true,
         },
         description: {
@@ -40,10 +40,10 @@ const fundSchema = new Schema({
             default: "",
         },
         lastDate: {
-            type: Date.format("DD-MM-YYYY"),
+            type: Date,
         },
         creationDate: {
-            type: Date.now().format("DD-MM-YYYY"),
+            type: Date.now(),
         },
         proofs: {
             type: Map,

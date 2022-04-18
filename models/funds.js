@@ -11,6 +11,10 @@ const fundSchema = new Schema({
             maxlength: [40, "A fund name must have less or equal then 40 characters"],
             minlength: [10, "A fund name must have more or equal then 10 characters"],
         },
+        category: {
+            type: String,
+            required: [true, "Category has to be specified"]
+        },
         fundId: {
             type: Schema.ObjectId,
             required: true,

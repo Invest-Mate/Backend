@@ -102,3 +102,18 @@ export const getUser = async(req, res) => {
         });
     }
 };
+
+export const deleteUser = async(req, res) => {
+    try {
+        let data = await User.findByIdAndDelete(req.body.id);
+        return res.json({
+            success: "Successfully Deleted the user",
+            data,
+        });
+    } catch (e) {
+        return res.json({
+            error: "Something went wrong",
+            message: e.message,
+        });
+    }
+}

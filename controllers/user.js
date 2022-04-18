@@ -45,7 +45,7 @@ export const pushCards = async(req, res) => {
         );
         return res.json({
             success: `Successfully updated ${req.body.id}`,
-            data: { user }
+            data: { user },
         });
     } catch (e) {
         return res.json({
@@ -84,5 +84,21 @@ export const updateUser = async(req, res) => {
             return res.json({ error: "Duplicate username" });
         }
         console.log(err);
+    }
+};
+
+export const getUser = async(req, res) => {
+    // const { id } = req.body;
+    try {
+        let data = await User.find();
+        return res.json({
+            success: "Successfull",
+            data,
+        });
+    } catch (e) {
+        return res.json({
+            error: "Unsuccessfull",
+            message: e.message,
+        });
     }
 };

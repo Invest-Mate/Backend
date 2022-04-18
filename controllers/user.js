@@ -22,7 +22,7 @@ export const createUser = async(req, res) => {
         await user.save();
         return res.json({
             success: "Successfully registered",
-            data: { user }
+            data: { user },
         });
     } catch (e) {
         return res.json({
@@ -31,6 +31,28 @@ export const createUser = async(req, res) => {
     }
 };
 
+export const pushCards = async(req, res) => {
+    const { ac_name, card_no, expiry, id } = req.body;
+    try {
+        let user = await User.findByIdAndUpdate(
+            id, {
+                cards: [{
+                    ac_name: ac_name,
+                    card_no: card_no,
+                    expiry: expiry,
+                }, ],
+            }, { new: true }
+        );
+        return res.json({
+            success: `Successfully updated ${req.body.id}`,
+            data: { user }
+        });
+    } catch (e) {
+        return res.json({
+            error: e.message,
+        });
+    }
+};
 export const updateUser = async(req, res) => {
     try {
         // console.log("profile update req.body", req.body);

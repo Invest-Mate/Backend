@@ -39,3 +39,18 @@ export const createFund = async(req, res) => {
         });
     }
 };
+
+export const deleteFund = async(req, res) => {
+    try {
+        let data = await Fund.findByIdAndDelete(req.body._id);
+        return res.json({
+            success: "Successfully Deleted the fund",
+            data,
+        });
+    } catch (e) {
+        return res.json({
+            error: "Something went wrong",
+            message: e.message,
+        });
+    }
+};

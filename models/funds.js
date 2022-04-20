@@ -13,27 +13,24 @@ const fundSchema = new Schema({
         },
         category: {
             type: String,
-            required: [true, "Category has to be specified"]
+            required: [true, "Category has to be specified"],
         },
-        fundId: {
-            type: Schema.ObjectId,
-            required: true,
-        },
+
         createdBy: {
             type: Schema.ObjectId,
             required: true,
         },
         description: {
             type: String,
-            required: true,
+            required: [true, "Description of the fund is required"],
         },
         projectedAmount: {
             type: Number,
-            required: true,
+            required: [true, "Amount projected from a fund is required"],
         },
         receivedAmount: {
             type: Number,
-            required: true,
+
         },
         ip: {
             type: String,
@@ -44,15 +41,19 @@ const fundSchema = new Schema({
             default: "",
         },
         lastDate: {
-            type: Date,
+            type: String,
+            required: [true, "Please provide the deadline of the fund"],
         },
-        creationDate: {
-            type: Date.now(),
-        },
-        proofs: {
-            type: Map,
-            of: String,
-        },
+        proofs: [{
+            filename: {
+                type: "String",
+                required: true,
+            },
+            fileUrl: {
+                type: "String",
+                required: true,
+            },
+        }, ],
         numOfPeople: {
             type: Number,
         },

@@ -62,10 +62,9 @@ export const pushCards = async(req, res) => {
 export const updateUser = async(req, res) => {
     try {
         // console.log("profile update req.body", req.body);
-        const data = {}; //Creating a storage to store object
-        if (req.body.photo) {
-            data.photo = req.body.photo;
-        }
+        const data = {};
+        data.photo = req.file.path.split('\\')[3];
+
         if (req.body.name) {
             data.name = req.body.name;
         }
@@ -85,8 +84,7 @@ export const updateUser = async(req, res) => {
         let user = await User.findByIdAndUpdate(req.body.id, data, { new: true });
         //In data variable the variable you are using should be same as that of model
         // console.log('udpated user', user)
-
-        res.json(user);
+        res.json({ user, data });
     } catch (err) {
         if (err.code == 11000) {
             return res.json({ error: "Duplicate username" });

@@ -49,7 +49,6 @@ const userSchema = new Schema({
         },
         photo: {
             type: String,
-            default: "",
         },
         cards: [{
             ac_name: {

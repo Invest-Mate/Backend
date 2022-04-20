@@ -1,4 +1,5 @@
 import User from "../models/user";
+import sharp from "sharp";
 // const multer = require("multer");
 
 import moment from "moment";
@@ -7,6 +8,7 @@ import moment from "moment";
 //     upload.single("photo");
 //     next();
 // };
+
 export const createUser = async(req, res) => {
     const { name, dob, address, email, aadhar, contact, ip } = req.body;
     const exist = await User.findOne({ email });

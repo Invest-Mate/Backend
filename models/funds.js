@@ -36,24 +36,15 @@ const fundSchema = new Schema({
             type: String,
             required: true,
         },
-        imageUrl: {
+        imageCover: {
             type: String,
-            default: "",
+            required: [true, 'A tour must have a image cover']
         },
         lastDate: {
             type: String,
             required: [true, "Please provide the deadline of the fund"],
         },
-        proofs: [{
-            filename: {
-                type: "String",
-                required: true,
-            },
-            fileUrl: {
-                type: "String",
-                required: true,
-            },
-        }, ],
+        proofs: [String],
         numOfPeople: {
             type: Number,
         },

@@ -1,5 +1,13 @@
 import User from "../models/user";
+import sharp from "sharp";
+// const multer = require("multer");
+
 import moment from "moment";
+
+// export const uploadUserPhoto = (req, res, next) => {
+//     upload.single("photo");
+//     next();
+// };
 
 export const createUser = async(req, res) => {
     const { name, dob, address, email, aadhar, contact, ip } = req.body;
@@ -56,7 +64,8 @@ export const pushCards = async(req, res) => {
 export const updateUser = async(req, res) => {
     try {
         // console.log("profile update req.body", req.body);
-        const data = {}; //Creating a storage to store object
+        const data = {};
+        data.photo = req.file.filename;
 
         if (req.body.name) {
             data.name = req.body.name;
@@ -74,11 +83,10 @@ export const updateUser = async(req, res) => {
             data.contact = req.body.contact;
         }
 
-        let user = await User.findByIdAndUpdate(req.body._id, data, { new: true });
+        let user = await User.findByIdAndUpdate(req.body.id, data, { new: true });
         //In data variable the variable you are using should be same as that of model
         // console.log('udpated user', user)
-
-        res.json(user);
+        res.json({ user, data });
     } catch (err) {
         if (err.code == 11000) {
             return res.json({ error: "Duplicate username" });
@@ -116,4 +124,4 @@ export const deleteUser = async(req, res) => {
             message: e.message,
         });
     }
-}
+};

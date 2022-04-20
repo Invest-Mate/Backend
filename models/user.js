@@ -49,7 +49,7 @@ const userSchema = new Schema({
         },
         photo: {
             type: String,
-            default: "",
+            default: 'default.jpg'
         },
         cards: [{
             ac_name: {

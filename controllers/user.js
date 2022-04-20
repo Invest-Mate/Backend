@@ -63,7 +63,7 @@ export const updateUser = async(req, res) => {
     try {
         // console.log("profile update req.body", req.body);
         const data = {};
-        data.photo = req.file.path.split('\\')[3];
+        data.photo = req.file.filename;
 
         if (req.body.name) {
             data.name = req.body.name;

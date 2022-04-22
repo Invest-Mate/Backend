@@ -40,9 +40,14 @@ export const createFund = async(req, res) => {
 export const updateFund = async(req, res) => {
     try {
         // console.log("profile update req.body", req.body);
-        console.log(req.files);
+        // console.log(req.files);
         const data = {};
-        data.imageCover = req.files.imageCover[0].originalname;
+        var proofsArray = [];
+        // data.imageCover = req.files.imageCover.originalname;
+        req.files.proofs.map(proof => proofsArray.push(proof.originalname));
+        data.proofs = proofsArray
+            // console.log(req.body.proofs);
+        data.imageCover = req.body.imageCover;
         if (req.body.title) {
             data.title = req.body.title;
         }

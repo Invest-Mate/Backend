@@ -44,7 +44,7 @@ const fundSchema = new Schema({
             type: String,
             required: [true, "Please provide the deadline of the fund"],
         },
-        proofs: [String],
+        proofs: [{ type: String }],
         numOfPeople: {
             type: Number,
         },

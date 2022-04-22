@@ -25,11 +25,11 @@ var uploadFundImages = upload.fields([
 // upload.single('image') req.file
 // upload.array('images', 5) req.files
 
-exports.resizeFundImages = async(req, res, next) => {
+var resizeFundImages = async(req, res, next) => {
     if (!req.files.imageCover || !req.files.proofs) return next();
 
     // 1) Cover image
-    req.body.imageCover = `tour-${req.body._id}-${Date.now()}-cover.jpeg`;
+    req.body.imageCover = `fund-${req.body._id}-${Date.now()}-cover.jpeg`;
     await sharp(req.files.imageCover[0].buffer)
         .resize(2000, 1333)
         .toFormat("jpeg")
@@ -39,29 +39,21 @@ exports.resizeFundImages = async(req, res, next) => {
     // 2) Images
     req.body.proofs = [];
 
-    await Promise.all(
-        req.files.proofs.map(async(file, i) => {
-            const filename = `tour-${req.body._id}-${Date.now()}-${i + 1}.jpeg`;
+    await req.files.proofs.map(async(file, i) => {
+        const filename = `fundProof-${req.body._id}-${Date.now()}-${i + 1}.jpeg`;
+        await sharp(file.buffer)
+            .resize(2000, 1333)
+            .toFormat("jpeg")
+            .jpeg({ quality: 90 })
+            .toFile(`public/img/funds/${filename}`);
 
-            await sharp(file.buffer)
-                .resize(2000, 1333)
-                .toFormat("jpeg")
-                .jpeg({ quality: 90 })
-                .toFile(`public/img/tours/${filename}`);
-
-            req.body.proofs.push(filename);
-        })
-    );
-
+        req.body.proofs.push(filename);
+    });
     next();
 };
 const router = express.Router();
-import {
-    createFund,
-    deleteFund,
-    updateFund,
-} from "../controllers/funds";
+import { createFund, deleteFund, updateFund } from "../controllers/funds";
 router.post("/fund/create-fund", createFund);
 router.delete("/fund/delete-fund", deleteFund);
-router.put("/fund/update-fund", uploadFundImages, updateFund);
+router.put("/fund/update-fund", uploadFundImages, resizeFundImages, updateFund);
 module.exports = router;

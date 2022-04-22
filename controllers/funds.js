@@ -43,11 +43,12 @@ export const updateFund = async(req, res) => {
         // console.log(req.files);
         const data = {};
         var proofsArray = [];
-        // data.imageCover = req.files.imageCover.originalname;
+        console.log(req.files)
+            // data.imageCover = req.files.imageCover.originalname;
         req.files.proofs.map(proof => proofsArray.push(proof.originalname));
         data.proofs = proofsArray
             // console.log(req.body.proofs);
-        data.imageCover = req.body.imageCover;
+        data.imageCover = req.files.imageCover[0].originalname;
         if (req.body.title) {
             data.title = req.body.title;
         }

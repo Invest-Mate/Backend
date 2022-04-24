@@ -5,10 +5,13 @@ import { readdirSync } from "fs";
 import morgan from "morgan";
 import globalErrorController from "./controllers/error_controller";
 import AppError from "./utils/appError";
-
+process.on('uncaughtException', err => {
+    console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+    console.log(err.name, err.message);
+    process.exit(1);
+});
 const app = express();
 require("dotenv").config();
-
 mongoose
     .connect(process.env.DATABASE, {
         useNewUrlParser: true,

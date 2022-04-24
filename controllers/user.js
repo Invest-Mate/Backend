@@ -10,7 +10,7 @@ import moment from "moment";
 // };
 
 export const createUser = async(req, res) => {
-    const { name, dob, address, email, aadhar, contact, ip } = req.body;
+    const { name, dob, address, email, aadhar, contact, ip, userId } = req.body;
     const exist = await User.findOne({ email });
     if (exist)
         return res.json({
@@ -25,6 +25,7 @@ export const createUser = async(req, res) => {
         aadhar,
         contact,
         ip,
+        userId
     });
     try {
         await user.save();

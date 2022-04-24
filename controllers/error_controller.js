@@ -7,6 +7,7 @@ const handleCastErrorDB = err => {
 
 const handleDuplicateFieldsDB = err => {
     const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+    //To get the value within quotes we are using this regular exp
     console.log(value);
 
     const message = `Duplicate field value: ${value}. Please use another value!`;
@@ -14,8 +15,9 @@ const handleDuplicateFieldsDB = err => {
 };
 const handleValidationErrorDB = err => {
     const errors = Object.values(err.errors).map(el => el.message);
-
+    //Object.values() fuction is ued to loop over all the objects in the json file
     const message = `Invalid input data. ${errors.join('. ')}`;
+    //All the error messages will be joined with '.' in between
     return new AppError(message, 400);
 };
 

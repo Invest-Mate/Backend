@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { readdirSync } from "fs";
 import morgan from "morgan";
-import globalErrorController from "./controllers/error_controller"
+import globalErrorController from "./controllers/error_controller";
 import AppError from "./utils/appError";
 
 const app = express();
@@ -23,8 +23,8 @@ app.use(
         origin: "http://localhost:3000",
     })
 );
-if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'));
+if (process.env.NODE_ENV === "development") {
+    app.use(morgan("dev"));
 }
 // automatic reloading of routes
 readdirSync("./routes").map((r) => app.use("/api", require(`./routes/${r}`)));
@@ -42,4 +42,18 @@ app.all("*", (req, res, next) => {
 app.use(globalErrorController);
 //This is a global error handling code
 const port = process.env.PORT || 8000;
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+const server = app.listen(port, () =>
+    console.log(`Server listening on port ${port}`)
+);
+
+process.on("unhandledRejection", (err) => {
+    //This acts as a safety net for developer
+    console.log("UNHANDLED REJECTION! 💥 Shutting down...");
+    console.log(err.name, err.message);
+    server.close(() => {
+        //Server will get closed after implementing its pending requests
+        process.exit(1);
+        //This will terminate our app gracefully
+    });
+});
+//We are using event handler to catch any asynchronus unhandled exception

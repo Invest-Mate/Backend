@@ -1,6 +1,8 @@
 import Fund from "../models/funds";
+import catchAsync from "../utils/catchAsync";
+import AppError from "../utils/appError";
 
-export const createFund = async(req, res) => {
+export const createFund = catchAsync(async(req, res) => {
     const {
         title,
         category,
@@ -24,69 +26,55 @@ export const createFund = async(req, res) => {
         ip,
         lastDate,
     });
-    try {
-        await fund.save();
-        return res.json({
-            success: "Fund created Successfully",
-            fund,
-        });
-    } catch (e) {
-        return res.json({
-            error: "Failed",
-            message: e.message,
-        });
-    }
-};
-export const updateFund = async(req, res) => {
-    try {
-        // console.log("profile update req.body", req.body);
-        // console.log(req.files);
-        const data = {};
-        var proofsArray = [];
-        console.log(req.files)
-            // data.imageCover = req.files.imageCover.originalname;
-        req.files.proofs.map(proof => proofsArray.push(proof.originalname));
-        data.proofs = proofsArray
-            // console.log(req.body.proofs);
-        data.imageCover = req.files.imageCover[0].originalname;
-        if (req.body.title) {
-            data.title = req.body.title;
-        }
-        if (req.body.description) {
-            data.description = req.body.description;
-        }
-        if (req.body.category) {
-            data.category = req.body.category;
-        }
-        if (req.body.projectedAmount) {
-            data.projectedAmount = req.body.projectedAmount;
-        }
-        if (req.body.lastDate) {
-            data.lastDate = req.body.lastDate;
-        }
 
-        let user = await Fund.findByIdAndUpdate(req.body._id, data, { new: true });
-        //In data variable the variable you are using should be same as that of model
-        // console.log('udpated user', user)
-        res.json({ user, data });
-    } catch (err) {
-        if (err.code == 11000) {
-            return res.json({ error: "Duplicate username" });
-        }
-        console.log(err);
+    await fund.save();
+    return res.json({
+        success: "Fund created Successfully",
+        fund,
+    });
+});
+export const updateFund = catchAsync(async(req, res) => {
+    // console.log("profile update req.body", req.body);
+    // console.log(req.files);
+    const data = {};
+    var proofsArray = [];
+    console.log(req.files);
+    // data.imageCover = req.files.imageCover.originalname;
+    req.files.proofs.map((proof) => proofsArray.push(proof.originalname));
+    data.proofs = proofsArray;
+    // console.log(req.body.proofs);
+    data.imageCover = req.files.imageCover[0].originalname;
+    if (req.body.title) {
+        data.title = req.body.title;
     }
-};
-export const deleteFund = async(req, res) => {
-    try {
-        let data = await Fund.findByIdAndDelete(req.body._id);
-        return res.json({
-            success: "Successfully Deleted the fund",
-            data,
-        });
-    } catch (e) {
-        return res.json({
-            error: "Something went wrong",
-            message: e.message,
-        });
+    if (req.body.description) {
+        data.description = req.body.description;
     }
-};
+    if (req.body.category) {
+        data.category = req.body.category;
+    }
+    if (req.body.projectedAmount) {
+        data.projectedAmount = req.body.projectedAmount;
+    }
+    if (req.body.lastDate) {
+        data.lastDate = req.body.lastDate;
+    }
+
+    let fund = await Fund.findByIdAndUpdate(req.body._id, data, { new: true });
+    if (!fund) {
+        return next(new AppError('No fund found with that ID', 404));
+    }
+    //In data variable the variable you are using should be same as that of model
+    // console.log('udpated user', user)
+    res.json({ user, data });
+});
+export const deleteFund = catchAsync(async(req, res) => {
+    let data = await Fund.findByIdAndDelete(req.body._id);
+    if (!data) {
+        return next(new AppError('No fund found with that ID', 404));
+    }
+    return res.json({
+        success: "Successfully Deleted the fund",
+        data,
+    });
+});

@@ -1,4 +1,4 @@
-const AppError = require('./../utils/appError').default;
+import AppError from './../utils/appError';
 
 const handleCastErrorDB = err => {
     const message = `Invalid ${err.path}: ${err.value}.`;
@@ -7,6 +7,7 @@ const handleCastErrorDB = err => {
 
 const handleDuplicateFieldsDB = err => {
     const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+    //To get the value within quotes we are using this regular exp
     console.log(value);
 
     const message = `Duplicate field value: ${value}. Please use another value!`;
@@ -14,8 +15,9 @@ const handleDuplicateFieldsDB = err => {
 };
 const handleValidationErrorDB = err => {
     const errors = Object.values(err.errors).map(el => el.message);
-
+    //Object.values() fuction is ued to loop over all the objects in the json file
     const message = `Invalid input data. ${errors.join('. ')}`;
+    //All the error messages will be joined with '.' in between
     return new AppError(message, 400);
 };
 
@@ -49,17 +51,20 @@ const sendErrorProd = (err, res) => {
     }
 };
 
-module.exports = (err, req, res, next) => {
+export default (err, req, res, next) => {
     // console.log(err.stack);
 
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
 
     if (process.env.NODE_ENV === 'development') {
+        console.log("We are in dev")
+        console.log(process.env.NODE_ENV);
         sendErrorDev(err, res);
+
     } else if (process.env.NODE_ENV === 'production') {
         let error = {...err };
-
+        console.log(process.env.NODE_ENV);
         if (error.name === 'CastError') error = handleCastErrorDB(error);
         if (error.code === 11000) error = handleDuplicateFieldsDB(error);
         if (error.name === 'ValidationError')

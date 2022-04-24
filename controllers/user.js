@@ -1,5 +1,6 @@
 import User from "../models/user";
 import catchAsync from "../utils/catchAsync";
+import AppError from "../utils/appError";
 import sharp from "sharp";
 // const multer = require("multer");
 
@@ -48,6 +49,9 @@ export const pushCards = catchAsync(async(req, res, next) => {
             }, ],
         }, { new: true }
     );
+    if (!user) {
+        return next(new AppError('No user found with that ID', 404));
+    }
     return res.json({
         success: `Successfully updated ${req.body.id}`,
         data: { user },
@@ -75,6 +79,9 @@ export const updateUser = catchAsync(async(req, res, next) => {
     }
 
     let user = await User.findByIdAndUpdate(req.body.id, data, { new: true });
+    if (!user) {
+        return next(new AppError('No user found with that ID', 404));
+    }
     //In data variable the variable you are using should be same as that of model
     // console.log('udpated user', user)
     res.json({ user, data });
@@ -92,6 +99,9 @@ export const getUser = catchAsync(async(req, res, next) => {
 
 export const deleteUser = catchAsync(async(req, res, next) => {
     let data = await User.findByIdAndDelete(req.body.id);
+    if (!data) {
+        return next(new AppError('No user found with that ID', 404));
+    }
     return res.json({
         success: "Successfully Deleted the user",
         data,

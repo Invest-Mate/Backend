@@ -1,5 +1,6 @@
 import Fund from "../models/funds";
 import catchAsync from "../utils/catchAsync";
+import AppError from "../utils/appError";
 
 export const createFund = catchAsync(async(req, res) => {
     const {
@@ -59,13 +60,19 @@ export const updateFund = catchAsync(async(req, res) => {
         data.lastDate = req.body.lastDate;
     }
 
-    let user = await Fund.findByIdAndUpdate(req.body._id, data, { new: true });
+    let fund = await Fund.findByIdAndUpdate(req.body._id, data, { new: true });
+    if (!fund) {
+        return next(new AppError('No fund found with that ID', 404));
+    }
     //In data variable the variable you are using should be same as that of model
     // console.log('udpated user', user)
     res.json({ user, data });
 });
 export const deleteFund = catchAsync(async(req, res) => {
     let data = await Fund.findByIdAndDelete(req.body._id);
+    if (!data) {
+        return next(new AppError('No fund found with that ID', 404));
+    }
     return res.json({
         success: "Successfully Deleted the fund",
         data,

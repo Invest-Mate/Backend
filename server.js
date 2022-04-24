@@ -22,5 +22,11 @@ app.use(
 app.use(morgan('dev'));
 // automatic reloading of routes
 readdirSync('./routes').map((r) => app.use("/api", require(`./routes/${r}`)))
+app.all('*', (req, res, next) => {
+    return res.status(400).json({
+        status: "Request Failed",
+        message: `Not able to find ${req.originalUrl} in the server!`
+    })
+})
 const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`Server listening on port ${port}`));

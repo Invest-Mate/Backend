@@ -39,9 +39,9 @@ import {
     getUser,
     deleteUser,
 } from "../controllers/user";
-router.post("/create-user", createUser);
-router.put("/update-user", upload.single("photo"), resizeUserPhoto, updateUser);
-router.put("/push-cards", pushCards);
-router.get("/get-user", getUser);
-router.delete("/delete-user", deleteUser);
+router.post("/user/create-user", createUser);
+router.put("/user/update-user", upload.single("photo"), resizeUserPhoto, updateUser);
+router.put("/user/push-cards", pushCards);
+router.get("/user/get-user", getUser);
+router.delete("/user/delete-user", deleteUser);
 module.exports = router;

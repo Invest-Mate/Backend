@@ -56,10 +56,13 @@ export default (err, req, res, next) => {
     err.status = err.status || 'error';
 
     if (process.env.NODE_ENV === 'development') {
+        console.log("We are in dev")
+        console.log(process.env.NODE_ENV);
         sendErrorDev(err, res);
+
     } else if (process.env.NODE_ENV === 'production') {
         let error = {...err };
-
+        console.log(process.env.NODE_ENV);
         if (error.name === 'CastError') error = handleCastErrorDB(error);
         if (error.code === 11000) error = handleDuplicateFieldsDB(error);
         if (error.name === 'ValidationError')

@@ -3,10 +3,12 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { readdirSync } from "fs";
 import morgan from "morgan";
+import globalErrorController from "./controllers/error_controller"
 import AppError from "./utils/appError";
 
 const app = express();
 require("dotenv").config();
+
 mongoose
     .connect(process.env.DATABASE, {
         useNewUrlParser: true,
@@ -21,7 +23,9 @@ app.use(
         origin: "http://localhost:3000",
     })
 );
-app.use(morgan("dev"));
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
 // automatic reloading of routes
 readdirSync("./routes").map((r) => app.use("/api", require(`./routes/${r}`)));
 app.all("*", (req, res, next) => {
@@ -35,14 +39,7 @@ app.all("*", (req, res, next) => {
     next(err);
 });
 //Above we introduced the error deliberately for testing
-app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || "Error occured";
-    res.status(err.statusCode).json({
-        status: err.status,
-        message: err.message,
-    });
-});
+app.use(globalErrorController);
 //This is a global error handling code
 const port = process.env.PORT || 8000;
 app.listen(port, () => console.log(`Server listening on port ${port}`));

@@ -7,6 +7,7 @@ const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
     if (file.mimetype.startsWith("image")) {
+        console.log("Yes its and image")
         cb(null, true);
     } else {
         cb(new AppError("Not an image! Please upload only images.", 400), false);
@@ -19,9 +20,10 @@ const upload = multer({
 });
 
 var resizeUserPhoto = async(req, res, next) => {
+    console.log(req.file);
     if (!req.file) return next();
 
-    req.file.filename = `user-${req.body.id}-${Date.now()}.jpeg`;
+    req.file.filename = `user-${req.body.id}-${req.file.originalname}`;
 
     await sharp(req.file.buffer)
         .resize(500, 500)
@@ -38,10 +40,12 @@ import {
     pushCards,
     getUser,
     deleteUser,
+    getAllUsers
 } from "../controllers/user";
 router.post("/user/create-user", createUser);
 router.put("/user/update-user", upload.single("photo"), resizeUserPhoto, updateUser);
 router.put("/user/push-cards", pushCards);
 router.get("/user/get-user", getUser);
+router.get("/user/get-all-users", getAllUsers);
 router.delete("/user/delete-user", deleteUser);
 module.exports = router;

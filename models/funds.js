@@ -42,7 +42,7 @@ const fundSchema = new Schema({
     },
     imageCover: {
         type: String,
-        required: [true, 'A tour must have a image cover']
+        // required: [true, 'A tour must have a image cover']
     },
     lastDate: {
         type: String,

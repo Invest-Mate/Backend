@@ -18,7 +18,18 @@ export const deleteOne = (Model) =>
 
 export const updateOne = (Model) =>
     catchAsync(async(req, res, next) => {
-        req.body.photo = req.file.originalname;
+        if (req.file) req.body.photo = req.file.originalname;
+        // const data = {};
+        var proofsArray = [];
+        // console.log(req.files);
+        // data.imageCover = req.files.imageCover.originalname;
+        if (req.files.proofs) {
+            req.files.proofs.map((proof) => proofsArray.push(proof.originalname));
+            req.body.proofs = proofsArray;
+        }
+        // console.log(req.body.proofs);
+        if (req.files.imageCover)
+            req.body.imageCover = req.files.imageCover[0].originalname;
         const doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
             new: true,
             runValidators: true,
@@ -58,11 +69,12 @@ export const getOne = (Model, popOptions) =>
         if (!doc) {
             return next(new AppError("No document found with that ID", 404));
         }
-        var virtuals = doc.MyFunds;
+        if (popOptions)
+            var MyFunds = doc.MyFunds;
         return res.status(200).json({
             status: "success",
             data: doc,
-            virtuals,
+            MyFunds,
         });
     });
 

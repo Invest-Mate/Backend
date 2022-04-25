@@ -4,16 +4,13 @@ import sharp from "sharp";
 const AppError = require("./../utils/appError");
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/img/funds/');
+        cb(null, "public/img/funds/");
     },
     filename: (req, file, cb) => {
         if (file.fieldname == "imageCover")
             cb(null, `fundCover-${req.body._id}-${file.originalname}`);
-        else
-            cb(null, `fundProof-${req.body._id}-${file.originalname}`);
-
+        else cb(null, `fundProof-${req.body._id}-${file.originalname}`);
     },
-
 });
 
 // const multerFilter = (req, file, cb) => {
@@ -74,8 +71,14 @@ var uploadFundImages = upload.fields([
 //     next();
 // };
 const router = express.Router();
-import { createFund, deleteFund, updateFund } from "../controllers/funds";
+import {
+    createFund,
+    deleteFund,
+    getAllFunds,
+    updateFund,
+} from "../controllers/funds";
 router.post("/fund/create-fund", createFund);
 router.delete("/fund/delete-fund", deleteFund);
+router.get("/fund/get-all-funds", getAllFunds);
 router.put("/fund/update-fund", uploadFundImages, updateFund);
 module.exports = router;

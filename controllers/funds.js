@@ -1,6 +1,7 @@
 import Fund from "../models/funds";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/appError";
+import { getAll } from "./factory_handler";
 
 export const createFund = catchAsync(async(req, res) => {
     const {
@@ -66,7 +67,7 @@ export const updateFund = catchAsync(async(req, res) => {
     }
     //In data variable the variable you are using should be same as that of model
     // console.log('udpated user', user)
-    res.json({ user, data });
+    res.json({ fund });
 });
 export const deleteFund = catchAsync(async(req, res) => {
     let data = await Fund.findByIdAndDelete(req.body._id);
@@ -78,3 +79,5 @@ export const deleteFund = catchAsync(async(req, res) => {
         data,
     });
 });
+
+export const getAllFunds = getAll(Fund);

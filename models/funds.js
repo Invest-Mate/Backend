@@ -52,9 +52,19 @@ const fundSchema = new Schema({
     numOfPeople: {
         type: Number,
     },
-}, { timestamps: true }, {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    donors: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }],
+}, { timestamps: true }, opts);
+fundSchema.pre('save', function(next) {
+    this.numOfPeople = this.donors.length;
+    next();
 });
-
+//Remaining Amount - Based on Transaction
+//Average Amount Donated - Based on Transaction
+//Amount Collected - Based on Transaction
+//Highest Donation
+//Lowest Donation
+//Array of dates and amony collected on that day left
 export default mongoose.model("Fund", fundSchema);

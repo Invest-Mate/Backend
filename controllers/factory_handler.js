@@ -1,68 +1,72 @@
-import catchAsync from '../utils/catchAsync.js'
-import AppError from '../utils/appError';
-import APIFeatures from '../utils/apiFeatures';
+import catchAsync from "../utils/catchAsync.js";
+import AppError from "../utils/appError";
+import APIFeatures from "../utils/apiFeatures";
 
-export const deleteOne = Model =>
+export const deleteOne = (Model) =>
     catchAsync(async(req, res, next) => {
         const doc = await Model.findByIdAndDelete(req.body.id);
 
         if (!doc) {
-            return next(new AppError('No document found with that ID', 404));
+            return next(new AppError("No document found with that ID", 404));
         }
 
         return res.status(204).json({
-            status: 'success',
-            message: `Successfully deleted ${req.body.id}`
+            status: "success",
+            message: `Successfully deleted ${req.body.id}`,
         });
     });
 
-export const updateOne = Model =>
+export const updateOne = (Model) =>
     catchAsync(async(req, res, next) => {
         req.body.photo = req.file.originalname;
         const doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
             new: true,
-            runValidators: true
+            runValidators: true,
         });
 
         if (!doc) {
-            return next(new AppError('No document found with that ID', 404));
+            return next(new AppError("No document found with that ID", 404));
         }
 
         res.status(200).json({
-            status: 'success',
-            data: doc
+            status: "success",
+            data: doc,
         });
     });
 
-export const createOne = Model =>
+export const createOne = (Model) =>
     catchAsync(async(req, res, next) => {
         const doc = await Model.create(req.body);
 
         res.status(201).json({
-            status: 'success',
+            status: "success",
             data: {
-                data: doc
-            }
+                data: doc,
+            },
         });
     });
 
 export const getOne = (Model, popOptions) =>
     catchAsync(async(req, res, next) => {
-        let query = Model.findById(req.body.id);
-        if (popOptions) query = query.populate(popOptions);
+        let query = Model.findById(req.body.id).populate(popOptions).select("-__v");
+        // if (popOptions) query = query.populate(popOptions);
+
+        console.log(popOptions);
+
         const doc = await query;
-
+        console.log(doc);
         if (!doc) {
-            return next(new AppError('No document found with that ID', 404));
+            return next(new AppError("No document found with that ID", 404));
         }
-
-        res.status(200).json({
-            status: 'success',
-            data: doc
+        var virtuals = doc.MyFunds;
+        return res.status(200).json({
+            status: "success",
+            data: doc,
+            virtuals,
         });
     });
 
-export const getAll = Model =>
+export const getAll = (Model) =>
     catchAsync(async(req, res, next) => {
         // To allow for nested GET reviews on tour (hack)
         // let filter = {};
@@ -78,10 +82,10 @@ export const getAll = Model =>
 
         // SEND RESPONSE
         res.status(200).json({
-            status: 'success',
+            status: "success",
             results: doc.length,
             data: {
-                data: doc
-            }
+                data: doc,
+            },
         });
     });

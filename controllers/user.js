@@ -31,6 +31,6 @@ export const pushCards = catchAsync(async(req, res, next) => {
     });
 });
 export const updateUser = updateOne(User);
-export const getUser = getOne(User);
+export const getUser = getOne(User, { path: 'MyFunds', select: '_id' });
 export const getAllUsers = getAll(User);
 export const deleteUser = deleteOne(User);

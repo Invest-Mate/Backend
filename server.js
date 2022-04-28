@@ -10,8 +10,7 @@ import qs from "querystring";
 import PaytmChecksum from "./helpers/checksum";
 import PaytmConfig from "./helpers/config";
 import globalErrorController from "./controllers/error_controller";
-const parseUrl = express.urlencoded({ extended: false });
-const parseJson = express.json({ extended: false });
+
 import AppError from "./utils/appError";
 import {
     PaymentForm,
@@ -31,13 +30,8 @@ mongoose
     })
     .then(() => console.log("DB connected"))
     .catch((e) => console.log(e));
-app.use(express.json({ limit: "5mb" }));
-app.use(express.urlencoded({ extended: true }));
-app.use(
-    cors({
-        origin: "http://localhost:3000",
-    })
-);
+app.use(express.json({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
 }

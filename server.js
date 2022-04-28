@@ -3,8 +3,20 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { readdirSync } from "fs";
 import morgan from "morgan";
+import https from "https";
+import path from "path";
+import fs from "fs";
+import qs from "querystring";
+import PaytmChecksum from "./helpers/checksum";
+import PaytmConfig from "./helpers/config";
 import globalErrorController from "./controllers/error_controller";
+const parseUrl = express.urlencoded({ extended: false });
+const parseJson = express.json({ extended: false });
 import AppError from "./utils/appError";
+import {
+    PaymentForm,
+    PayNow
+} from "./controllers/payment";
 process.on('uncaughtException', err => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message);
@@ -29,6 +41,7 @@ app.use(
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
 }
+
 // automatic reloading of routes
 readdirSync("./routes").map((r) => app.use("/api", require(`./routes/${r}`)));
 app.all("*", (req, res, next) => {

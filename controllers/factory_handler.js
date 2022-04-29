@@ -4,6 +4,7 @@ import APIFeatures from "../utils/apiFeatures";
 
 export const deleteOne = (Model) =>
     catchAsync(async(req, res, next) => {
+        console.log(req.body)
         const doc = await Model.findByIdAndDelete(req.body.id);
 
         if (!doc) {

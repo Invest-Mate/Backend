@@ -31,9 +31,11 @@ app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 
 app.use(compression());
+app.use(express.json({ limit: "5mb" }));
+app.use(express.urlencoded({ extended: true }));
 app.use('/api/transaction', require('./routes/transaction'));
-app.use('/api/user', require('./routes/user.js'));
-app.use('/api/fund', require('./routes/funds.js'));
+app.use('/api/user', require('./routes/user'));
+app.use('/api/fund', require('./routes/funds'));
 app.all("*", (req, res, next) => {
     // return res.status(400).json({
     //     status: "Request Failed",

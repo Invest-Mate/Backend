@@ -3,9 +3,11 @@ import qs from "querystring";
 import checksum_lib from "../helpers/checksum";
 
 import config from "../helpers/config";
+require("dotenv").config();
+const port = process.env.PORT;
 export const PaymentForm = (req, res) => {
     // let reqPath = path.join(__dirname, '../');
-    console.log(__dirname + '/index.html');
+    // console.log(__dirname + '/index.html');
     res.sendFile(__dirname + '/index.html')
 };
 export const PayNow = (req, res) => {
@@ -26,7 +28,7 @@ export const PayNow = (req, res) => {
         params['ORDER_ID'] = 'TEST_' + new Date().getTime();
         params['CUST_ID'] = paymentDetails.customerId;
         params['TXN_AMOUNT'] = paymentDetails.amount;
-        params['CALLBACK_URL'] = 'http://localhost:8000/api/callback';
+        params['CALLBACK_URL'] = 'http://localhost:8000/api/transaction/callback';
         params['EMAIL'] = paymentDetails.customerEmail;
         params['MOBILE_NO'] = paymentDetails.customerPhone;
 

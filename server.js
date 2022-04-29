@@ -2,6 +2,7 @@ const express = require("express");
 import mongoose from "mongoose";
 import morgan from "morgan";
 const app = express();
+const compression = require('compression');
 require("dotenv").config();
 import globalErrorController from "./controllers/error_controller";
 
@@ -29,7 +30,8 @@ app.engine('html', require('ejs').renderFile);
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 
-app.use('/api/', require('./routes/transaction'));
+app.use(compression());
+app.use('/api/transaction', require('./routes/transaction'));
 app.use('/api/user', require('./routes/user.js'));
 app.use('/api/fund', require('./routes/funds.js'));
 app.all("*", (req, res, next) => {

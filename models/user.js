@@ -48,7 +48,6 @@ const userSchema = new Schema({
     },
     ip: {
         type: String,
-        required: true,
     },
     photo: {
         type: String,

@@ -1,4 +1,5 @@
-import express from "express";
+const express = require('express');
+const app = express();
 const AppError = require("./../utils/appError");
 import sharp from "sharp";
 const multer = require("multer"); //multer imported
@@ -42,10 +43,10 @@ import {
     deleteUser,
     getAllUsers
 } from "../controllers/user";
-router.post("/create-user", createUser);
-router.put("/update-user", upload.single("photo"), resizeUserPhoto, updateUser);
-router.put("/push-cards", pushCards);
-router.get("/get-user", getUser);
-router.get("/get-all-users", getAllUsers);
-router.delete("/delete-user", deleteUser);
-module.exports = router;
+app.post("/create-user", createUser);
+app.put("/update-user", upload.single("photo"), resizeUserPhoto, updateUser);
+app.put("/push-cards", pushCards);
+app.get("/get-user", getUser);
+app.get("/get-all-users", getAllUsers);
+app.delete("/delete-user", deleteUser);
+module.exports = app;

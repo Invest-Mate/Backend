@@ -1,28 +1,20 @@
-import express from "express";
+const express = require("express");
 import mongoose from "mongoose";
-import cors from "cors";
-import { readdirSync } from "fs";
 import morgan from "morgan";
-import https from "https";
-import path from "path";
-import fs from "fs";
-import qs from "querystring";
-import PaytmChecksum from "./helpers/checksum";
-import PaytmConfig from "./helpers/config";
+const app = express();
+require("dotenv").config();
 import globalErrorController from "./controllers/error_controller";
 
 import AppError from "./utils/appError";
-import {
-    PaymentForm,
-    PayNow
-} from "./controllers/payment";
 process.on('uncaughtException', err => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message);
     process.exit(1);
 });
-const app = express();
 require("dotenv").config();
+if (process.env.NODE_ENV === "development") {
+    app.use(morgan("dev"));
+}
 mongoose
     .connect(process.env.DATABASE, {
         useNewUrlParser: true,
@@ -30,14 +22,16 @@ mongoose
     })
     .then(() => console.log("DB connected"))
     .catch((e) => console.log(e));
-app.use(express.json({ extended: false }));
-app.use(express.urlencoded({ extended: false }));
-if (process.env.NODE_ENV === "development") {
-    app.use(morgan("dev"));
-}
+const PORT = process.env.PORT || 3000;
 
-// automatic reloading of routes
-readdirSync("./routes").map((r) => app.use("/api", require(`./routes/${r}`)));
+app.use(express.static(__dirname + '/views'));
+app.engine('html', require('ejs').renderFile);
+app.set("view engine", "html");
+app.set("views", __dirname + "/views");
+
+app.use('/api/', require('./routes/transaction'));
+app.use('/api/user', require('./routes/user.js'));
+app.use('/api/fund', require('./routes/funds.js'));
 app.all("*", (req, res, next) => {
     // return res.status(400).json({
     //     status: "Request Failed",
@@ -50,12 +44,9 @@ app.all("*", (req, res, next) => {
 });
 //Above we introduced the error deliberately for testing
 app.use(globalErrorController);
-//This is a global error handling code
-const port = process.env.PORT || 8000;
-const server = app.listen(port, () =>
-    console.log(`Server listening on port ${port}`)
-);
-
+app.listen(PORT, () => {
+    console.log(`App is listening on Port ${PORT}`);
+});
 process.on("unhandledRejection", (err) => {
     //This acts as a safety net for developer
     console.log("UNHANDLED REJECTION! 💥 Shutting down...");
@@ -66,4 +57,3 @@ process.on("unhandledRejection", (err) => {
         //This will terminate our app gracefully
     });
 });
-//We are using event handler to catch any asynchronus unhandled exception

@@ -78,9 +78,9 @@ import {
     updateFund,
     topFunds
 } from "../controllers/funds";
-router.post("/fund/create-fund", createFund);
-router.delete("/fund/delete-fund", deleteFund);
-router.get("/fund/get-all-funds", getAllFunds);
-router.get("/fund/top-funds", topFunds);
-router.put("/fund/update-fund", uploadFundImages, updateFund);
+router.post("/create-fund", createFund);
+router.delete("/delete-fund", deleteFund);
+router.get("/get-all-funds", getAllFunds);
+router.get("/top-funds", topFunds);
+router.put("/update-fund", uploadFundImages, updateFund);
 module.exports = router;

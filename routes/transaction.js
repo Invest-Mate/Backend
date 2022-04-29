@@ -1,9 +1,9 @@
-import express from "express";
-import { PaymentForm, PayNow, Callback } from "../controllers/payment";
-const router = express.Router();
+const express = require("express");
+const app = express();
+const { PaymentForm, PayNow, Callback } = require("../controllers/payment");
 const parseUrl = express.urlencoded({ extended: false });
 const parseJson = express.json({ extended: false });
-router.get('/payment', PaymentForm);
-router.post('/paynow', [parseUrl, parseJson], PayNow);
-router.post('/callback', Callback)
-module.exports = router;
+app.get("/payment", PaymentForm);
+app.post("/paynow", [parseUrl, parseJson], PayNow);
+app.post("/callback", Callback);
+module.exports = app;

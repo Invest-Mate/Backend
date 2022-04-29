@@ -3,9 +3,11 @@ import qs from "querystring";
 import checksum_lib from "../helpers/checksum";
 
 import config from "../helpers/config";
+require("dotenv").config();
+const port = process.env.PORT;
 export const PaymentForm = (req, res) => {
     // let reqPath = path.join(__dirname, '../');
-    console.log(__dirname + '/index.html');
+    // console.log(__dirname + '/index.html');
     res.sendFile(__dirname + '/index.html')
 };
 export const PayNow = (req, res) => {

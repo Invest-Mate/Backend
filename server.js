@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.static(__dirname + '/views'));
 app.engine('html', require('ejs').renderFile);
-app.set("view engine", "html");
+app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 
 app.use('/api/', require('./routes/transaction'));

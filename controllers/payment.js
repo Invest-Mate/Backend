@@ -1,13 +1,12 @@
-import http from "http";
 import https from "https";
-import path from "path";
-import fs from "fs";
 import qs from "querystring";
 import checksum_lib from "../helpers/checksum";
 
 import config from "../helpers/config";
 export const PaymentForm = (req, res) => {
-    res.render("index");
+    // let reqPath = path.join(__dirname, '../');
+    console.log(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index.html')
 };
 export const PayNow = (req, res) => {
     var paymentDetails = {
@@ -100,20 +99,17 @@ export var Callback = (req, res) => {
                 // Set up the request
                 var response = "";
                 var post_req = https.request(options, function(post_res) {
-                    post_res.on("data", function(chunk) {
+                    post_res.on('data', function(chunk) {
                         response += chunk;
                     });
 
-                    post_res.on("end", function() {
-                        console.log("S2S Response: ", response, "\n");
+                    post_res.on('end', function() {
+                        console.log('S2S Response: ', response, "\n");
 
                         var _result = JSON.parse(response);
-                        if (_result.STATUS == "TXN_SUCCESS") {
-                            res.send(response);
-                            res.write(response);
-                        } else {
-                            res.send("payment failed");
-                        }
+                        res.render('response', {
+                            'data': _result
+                        })
                     });
                 });
 

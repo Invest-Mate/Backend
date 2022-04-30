@@ -42,7 +42,7 @@ const userSchema = new Schema({
     },
     contact: {
         type: String,
-        required: true,
+        // required: true,
         max: [10, "Contact number cannot be greater than 10 characters"],
         min: 10,
     },

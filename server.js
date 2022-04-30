@@ -27,7 +27,8 @@ mongoose
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static(__dirname + '/views'));
-app.use('/images', express.static(path.join(__dirname + '/public/img/users')));
+app.use('/images/users', express.static(path.join(__dirname + '/public/img/users')));
+app.use('/images/funds', express.static(path.join(__dirname + '/public/img/funds')));
 app.engine('html', require('ejs').renderFile);
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");

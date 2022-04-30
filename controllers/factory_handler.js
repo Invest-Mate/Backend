@@ -1,5 +1,6 @@
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError";
+import user from "../models/user.js";
 import APIFeatures from "../utils/apiFeatures";
 
 export const deleteOne = (Model) =>
@@ -18,18 +19,20 @@ export const deleteOne = (Model) =>
 
 export const updateOne = (Model) =>
     catchAsync(async(req, res, next) => {
-        if (req.file) req.body.photo = req.file.originalname;
+        if (req.file) req.body.photo = req.file.filename;
         // const data = {};
         var proofsArray = [];
         // console.log(req.files);
         // data.imageCover = req.files.imageCover.originalname;
-        if (req.files.proofs) {
-            req.files.proofs.map((proof) => proofsArray.push(proof.originalname));
-            req.body.proofs = proofsArray;
+        if (Model != user) {
+            if (req.files.proofs != undefined) {
+                req.files.proofs.map((proof) => proofsArray.push(proof.filename));
+                req.body.proofs = proofsArray;
+            }
+            // console.log(req.body.proofs);
+            if (req.files.imageCover)
+                req.body.imageCover = req.files.imageCover[0].filename;
         }
-        // console.log(req.body.proofs);
-        if (req.files.imageCover)
-            req.body.imageCover = req.files.imageCover[0].originalname;
         const doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
             new: true,
             runValidators: true,
@@ -47,6 +50,20 @@ export const updateOne = (Model) =>
 
 export const createOne = (Model) =>
     catchAsync(async(req, res, next) => {
+        // if (req.file) req.body.photo = req.file.filename;
+        // // const data = {};
+        // var proofsArray = [];
+        // // console.log(req.files);
+        // // data.imageCover = req.files.imageCover.originalname;
+        // if (Model != user) {
+        //     if (req.files.proofs != undefined) {
+        //         req.files.proofs.map((proof) => proofsArray.push(proof.filename));
+        //         req.body.proofs = proofsArray;
+        //     }
+        //     // console.log(req.body.proofs);
+        //     if (req.files.imageCover)
+        //         req.body.imageCover = req.files.imageCover[0].filename;
+        // }
         const doc = await Model.create(req.body);
 
         res.status(201).json({

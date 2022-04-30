@@ -35,7 +35,8 @@ const sendErrorProd = (err, res) => {
     if (err.isOperational) {
         res.status(err.statusCode).json({
             status: err.status,
-            message: err.message
+            message: err.message,
+            error: err,
         });
 
         // Programming or other unknown error: don't leak error details
@@ -46,7 +47,8 @@ const sendErrorProd = (err, res) => {
         // 2) Send generic message
         res.status(500).json({
             status: 'error',
-            message: 'Something went very wrong!'
+            message: 'Something went very wrong!',
+            error: err,
         });
     }
 };

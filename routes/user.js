@@ -1,13 +1,14 @@
-import express from "express";
+const express = require("express");
+const app = express();
 const AppError = require("./../utils/appError");
-import sharp from "sharp";
+const sharp = require("sharp");
 const multer = require("multer"); //multer imported
 // const upload = multer({ dest: "public/img/users" });
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
     if (file.mimetype.startsWith("image")) {
-        console.log("Yes its and image")
+        console.log("Yes its and image");
         cb(null, true);
     } else {
         cb(new AppError("Not an image! Please upload only images.", 400), false);
@@ -32,20 +33,19 @@ var resizeUserPhoto = async(req, res, next) => {
         .toFile(`public/img/users/${req.file.filename}`);
     next();
 };
-
-const router = express.Router();
-import {
+const {
     createUser,
     updateUser,
     pushCards,
     getUser,
     deleteUser,
-    getAllUsers
-} from "../controllers/user";
-router.post("/create-user", createUser);
-router.put("/update-user", upload.single("photo"), resizeUserPhoto, updateUser);
-router.put("/push-cards", pushCards);
-router.get("/get-user", getUser);
-router.get("/get-all-users", getAllUsers);
-router.delete("/delete-user", deleteUser);
-module.exports = router;
+    getAllUsers,
+} = require("../controllers/user");
+
+app.post("/create-user", createUser);
+app.put("/update-user", upload.single("photo"), resizeUserPhoto, updateUser);
+app.put("/push-cards", pushCards);
+app.get("/get-user", getUser);
+app.get("/get-all-users", getAllUsers);
+app.delete("/delete-user", deleteUser);
+module.exports = app;

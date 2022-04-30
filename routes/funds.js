@@ -8,8 +8,8 @@ const multerStorage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         if (file.fieldname == "imageCover")
-            cb(null, `fundCover-${req.body._id}-${file.originalname}`);
-        else cb(null, `fundProof-${req.body._id}-${file.originalname}`);
+            cb(null, `fundCover-${req.body.id}-${file.originalname}`);
+        else cb(null, `fundProof-${req.body.id}-${file.originalname}`);
     },
 });
 

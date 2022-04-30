@@ -8,35 +8,25 @@ const transSchema = new Schema({
             type: Number,
             required: true,
         },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
         trans_date: {
-            type: Date.now().format("DD-MM-YYYY"),
+            type: String,
         },
         status: {
             type: Boolean,
             required: true,
         },
-        debited_From: {
-            acc_no: {
-                type: String,
-                required: true,
-            },
-            holder_name: {
-                type: String,
-                required: true,
-            },
-            ifsc: {
-                type: String,
-                required: true,
-            },
-        },
         credited_To: {
             type: String,
-            required: true,
+            default: '378282246310005',
         },
-
         fundId: {
             type: ObjectId,
             required: true,
+            ref: 'Fund'
         },
         ip: {
             type: String,

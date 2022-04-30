@@ -37,7 +37,6 @@ export const updateOne = (Model) =>
             new: true,
             runValidators: true,
         });
-
         if (!doc) {
             return next(new AppError("No document found with that ID", 404));
         }
@@ -79,7 +78,7 @@ export const getOne = (Model, popOptions) =>
         let query = Model.findById(req.body.id).populate(popOptions).select("-__v");
         // if (popOptions) query = query.populate(popOptions);
 
-        console.log(popOptions);
+        // console.log(popOptions);
 
         const doc = await query;
         console.log(doc);

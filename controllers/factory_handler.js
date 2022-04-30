@@ -50,20 +50,20 @@ export const updateOne = (Model) =>
 
 export const createOne = (Model) =>
     catchAsync(async(req, res, next) => {
-        if (req.file) req.body.photo = req.file.filename;
-        // const data = {};
-        var proofsArray = [];
-        // console.log(req.files);
-        // data.imageCover = req.files.imageCover.originalname;
-        if (Model != user) {
-            if (req.files.proofs != undefined) {
-                req.files.proofs.map((proof) => proofsArray.push(proof.filename));
-                req.body.proofs = proofsArray;
-            }
-            // console.log(req.body.proofs);
-            if (req.files.imageCover)
-                req.body.imageCover = req.files.imageCover[0].filename;
-        }
+        // if (req.file) req.body.photo = req.file.filename;
+        // // const data = {};
+        // var proofsArray = [];
+        // // console.log(req.files);
+        // // data.imageCover = req.files.imageCover.originalname;
+        // if (Model != user) {
+        //     if (req.files.proofs != undefined) {
+        //         req.files.proofs.map((proof) => proofsArray.push(proof.filename));
+        //         req.body.proofs = proofsArray;
+        //     }
+        //     // console.log(req.body.proofs);
+        //     if (req.files.imageCover)
+        //         req.body.imageCover = req.files.imageCover[0].filename;
+        // }
         const doc = await Model.create(req.body);
 
         res.status(201).json({

@@ -1,6 +1,7 @@
 const express = require("express");
 import mongoose from "mongoose";
 import morgan from "morgan";
+import path from 'path';
 const app = express();
 const compression = require('compression');
 require("dotenv").config();
@@ -26,14 +27,16 @@ mongoose
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static(__dirname + '/views'));
+app.use('/images', express.static(path.join(__dirname + '/public/img/users')));
 app.engine('html', require('ejs').renderFile);
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 
 app.use(compression());
-app.use(express.json({ limit: "5mb" }));
-app.use(express.urlencoded({ extended: true }));
 app.use('/api/transaction', require('./routes/transaction'));
+app.use(express.json({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
+
 app.use('/api/user', require('./routes/user'));
 app.use('/api/fund', require('./routes/funds'));
 app.all("*", (req, res, next) => {

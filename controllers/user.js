@@ -33,16 +33,4 @@ export const pushCards = catchAsync(async(req, res, next) => {
 export const updateUser = updateOne(User);
 export const getUser = getOne(User, { path: 'MyFunds', select: '_id' });
 export const getAllUsers = getAll(User);
-export const deleteUser = catchAsync(async(req, res, next) => {
-    console.log(req.body)
-    const doc = await User.findByIdAndDelete(req.body.id);
-
-    if (!doc) {
-        return next(new AppError("No document found with that ID", 404));
-    }
-
-    return res.status(204).json({
-        status: "success",
-        message: `Successfully deleted ${req.body.id}`,
-    });
-});
+export const deleteUser = deleteOne(User);

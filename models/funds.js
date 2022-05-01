@@ -35,7 +35,6 @@ const fundSchema = new Schema({
     },
     receivedAmount: {
         type: Number,
-
     },
     ip: {
         type: String,
@@ -56,11 +55,12 @@ const fundSchema = new Schema({
     donors: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-    }],
+    }]
 }, { timestamps: true }, opts);
-fundSchema.pre('save', function(next) {
-    this.numOfPeople = this.donors.length;
-    next();
+fundSchema.virtual('transactions', {
+    ref: 'Transaction',
+    localField: '_id',
+    foreignField: 'fundId',
 });
 //Remaining Amount - Based on Transaction
 //Average Amount Donated - Based on Transaction

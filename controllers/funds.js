@@ -108,3 +108,4 @@ export const topFunds = catchAsync(async(req, res, next) => {
         }
     });
 });
+//Average fund received

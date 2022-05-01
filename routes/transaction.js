@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const { PaymentForm, PayNow, Callback } = require("../controllers/payment");
+const { Demo } = require("../controllers/transaction");
 const parseUrl = express.urlencoded({ extended: false });
 const parseJson = express.json({ extended: false });
 app.get("/payment", PaymentForm);

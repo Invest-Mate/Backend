@@ -83,6 +83,6 @@ router.post("/create-fund", createFund);
 router.delete("/delete-fund", deleteFund);
 router.get("/get-all-funds", getAllFunds);
 router.get("/top-funds", topFunds);
-router.get('/get-fund', getFund);
+router.get('/get-fund/:id', getFund);
 router.put("/update-fund", uploadFundImages, updateFund);
 module.exports = router;

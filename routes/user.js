@@ -45,7 +45,7 @@ const {
 app.post("/create-user", createUser);
 app.put("/update-user", upload.single("photo"), resizeUserPhoto, updateUser);
 app.put("/push-cards", pushCards);
-app.get("/get-user", getUser);
+app.get("/get-user/:id", getUser);
 app.get("/get-all-users", getAllUsers);
 app.delete("/delete-user", deleteUser);
 module.exports = app;

@@ -75,7 +75,7 @@ export const createOne = (Model) =>
 
 export const getOne = (Model, popOptions) =>
     catchAsync(async(req, res, next) => {
-        let query = Model.findById(req.body.id).populate(popOptions).select("-__v");
+        let query = Model.findById(req.params.id).populate(popOptions).select("-__v");
         // if (popOptions) query = query.populate(popOptions);
 
         // console.log(popOptions);

@@ -1,11 +1,13 @@
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 const AppError = require("./../utils/appError");
 const sharp = require("sharp");
 const multer = require("multer"); //multer imported
 // const upload = multer({ dest: "public/img/users" });
 const multerStorage = multer.memoryStorage();
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 const multerFilter = (req, file, cb) => {
     if (file.mimetype.startsWith("image")) {
         console.log("Yes its and image");

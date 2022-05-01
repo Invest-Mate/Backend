@@ -79,4 +79,9 @@ userSchema.virtual('MyFunds', {
     localField: '_id',
     foreignField: 'createdBy',
 });
+userSchema.virtual('User_Transactions', {
+    ref: 'Transaction',
+    localField: '_id',
+    foreignField: 'userId',
+});
 export default mongoose.model("User", userSchema);

@@ -1,10 +1,17 @@
 const express = require("express");
 const app = express();
 const { PaymentForm, PayNow, Callback } = require("../controllers/payment");
-const { Demo } = require("../controllers/transaction");
+const { createTransaction, getAllTransaction, getTransaction, getFundTransactions, FundStats } = require("../controllers/transaction");
 const parseUrl = express.urlencoded({ extended: false });
 const parseJson = express.json({ extended: false });
 app.get("/payment", PaymentForm);
 app.post("/paynow", [parseUrl, parseJson], PayNow);
 app.post("/callback", Callback);
+app.use(express.json());
+app.use(express.urlencoded());
+app.post("/create-transaction", createTransaction);
+app.get("/all-transactions", getAllTransaction);
+app.get("/get-transaction/:id", getTransaction);
+app.get("/get-fund-transaction/:id", getFundTransactions);
+app.get("/fund-stats/:id", FundStats);
 module.exports = app;

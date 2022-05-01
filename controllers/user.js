@@ -31,7 +31,7 @@ export const pushCards = catchAsync(async(req, res, next) => {
     });
 });
 export const updateUser = updateOne(User);
-export const getUser = getOne(User, { path: 'MyFunds', select: '_id' });
+export const getUser = getOne(User, { path: 'MyFunds User_Transactions', select: '_id fundId' });
 export const getAllUsers = getAll(User);
 export const deleteUser = deleteOne(User);
 //updating the donor when transaction button is pressed

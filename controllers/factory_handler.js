@@ -85,12 +85,16 @@ export const getOne = (Model, popOptions) =>
         if (!doc) {
             return next(new AppError("No document found with that ID", 404));
         }
-        if (popOptions)
+        if (popOptions) {
             var MyFunds = doc.MyFunds;
+            var user_Transactions = doc.User_Transactions;
+        }
+
         return res.status(200).json({
             status: "success",
             data: doc,
             MyFunds,
+            user_Transactions
         });
     });
 

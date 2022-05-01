@@ -57,10 +57,6 @@ const fundSchema = new Schema({
         ref: 'User',
     }]
 }, { timestamps: true }, opts);
-fundSchema.pre('save', function(next) {
-    this.numOfPeople = this.donors.length;
-    next();
-});
 fundSchema.virtual('transactions', {
     ref: 'Transaction',
     localField: '_id',

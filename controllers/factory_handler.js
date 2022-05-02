@@ -1,6 +1,7 @@
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError";
 import user from "../models/user.js";
+import path from "path";
 import { CloudConfig } from "../utils/cloud_config.js";
 const cloudinary = require("cloudinary");
 require("dotenv").config();
@@ -10,7 +11,6 @@ cloudinary.config({
     api_key: process.env.api_key,
     api_secret: process.env.api_secret,
 });
-
 async function uploadToCloudinary(locaFilePath) {
     // locaFilePath: path of image which was just
     // uploaded to "uploads" folder
@@ -39,7 +39,7 @@ async function uploadToCloudinary(locaFilePath) {
             // fs.unlinkSync(locaFilePath);
             return {
                 message: "Fail",
-                error: error
+                error: error,
             };
         });
 }
@@ -60,17 +60,13 @@ export const deleteOne = (Model) =>
 export const updateOne = (Model) =>
     catchAsync(async(req, res, next) => {
         if (req.file) {
-            console.log("Yes its uploading")
-            console.log(CloudConfig);
-            console.log(req.file);
-            var locaFilePath = "public\\img\\users\\" + req.file.filename;
-            console.log(locaFilePath);
+            var locaFilePath = path.join(__dirname, '../', '/public/img/users', req.file.filename);
+            console.log("Localpath=", locaFilePath);
             var result = await uploadToCloudinary(locaFilePath);
 
             console.log("Result Url =", result);
             req.body.photo = result.url;
         }
-
         // const data = {};
         var proofsArray = [];
         console.log(req.files);
@@ -89,7 +85,9 @@ export const updateOne = (Model) =>
             }
             // console.log(req.body.proofs);
             if (req.files.imageCover) {
-                var locaFilePath = "public\\img\\funds\\" + req.files.imageCover[0].filename;
+                console.log('/images/users');
+                var locaFilePath =
+                    req.files.imageCover[0].path;
                 console.log(locaFilePath);
                 var result = await uploadToCloudinary(locaFilePath);
                 req.body.imageCover = result.url;
@@ -184,5 +182,15 @@ export const getAll = (Model) =>
             data: {
                 data: doc,
             },
+        });
+    });
+export const Filtered = (Model) =>
+    catchAsync(async(req, res, next) => {
+        console.log(req.query);
+        const doc = await Model.find(req.query);
+        res.status(200).json({
+            status: "success",
+            results: doc.length,
+            data: doc
         });
     });

@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import sharp from "sharp";
+import { Filtered } from "../controllers/factory_handler";
 const AppError = require("./../utils/appError");
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -77,7 +78,8 @@ import {
     getAllFunds,
     updateFund,
     topFunds,
-    getFund
+    getFund,
+    Search
 } from "../controllers/funds";
 router.post("/create-fund", createFund);
 router.delete("/delete-fund", deleteFund);
@@ -85,4 +87,5 @@ router.get("/get-all-funds", getAllFunds);
 router.get("/top-funds", topFunds);
 router.get('/get-fund/:id', getFund);
 router.put("/update-fund", uploadFundImages, updateFund);
+router.get('/search', Search);
 module.exports = router;

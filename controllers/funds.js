@@ -7,6 +7,7 @@ import {
     getAll,
     getOne,
     updateOne,
+    Filtered
 } from "./factory_handler";
 
 export const createFund = createOne(Fund);
@@ -33,4 +34,5 @@ export const topFunds = catchAsync(async(req, res, next) => {
         },
     });
 });
+export const Search = Filtered(Fund);
 //Average fund received

@@ -69,7 +69,6 @@ export const updateOne = (Model) =>
         }
         // const data = {};
         var proofsArray = [];
-        console.log(req.files);
         // data.imageCover = req.files.imageCover.originalname;
         if (Model != user) {
             if (req.files.proofs != undefined) {
@@ -86,10 +85,10 @@ export const updateOne = (Model) =>
             }
             // console.log(req.body.proofs);
             if (req.files.imageCover) {
-                console.log('/images/users');
                 var locaFilePath = path.join(__dirname, '../', req.files.imageCover[0].path);
                 console.log(locaFilePath);
                 var result = await uploadToCloudinary(locaFilePath);
+                console.log(result);
                 req.body.imageCover = result.url;
                 // req.body.imageCover = req.files.imageCover[0].filename;
             }

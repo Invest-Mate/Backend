@@ -1,8 +1,48 @@
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError";
 import user from "../models/user.js";
+import path from "path";
+import { CloudConfig } from "../utils/cloud_config.js";
+const cloudinary = require("cloudinary");
+require("dotenv").config();
 import APIFeatures from "../utils/apiFeatures";
+cloudinary.config({
+    cloud_name: process.env.cloud_name,
+    api_key: process.env.api_key,
+    api_secret: process.env.api_secret,
+});
+async function uploadToCloudinary(locaFilePath) {
+    // locaFilePath: path of image which was just
+    // uploaded to "uploads" folder
 
+    var mainFolderName = "main";
+    // filePathOnCloudinary: path of image we want
+    // to set when it is uploaded to cloudinary
+    var filePathOnCloudinary = mainFolderName + "/" + locaFilePath;
+    console.log("Yes uploading");
+    return cloudinary.uploader
+        .upload(locaFilePath, { public_id: filePathOnCloudinary })
+        .then((result) => {
+            // Image has been successfully uploaded on
+            // cloudinary So we dont need local image
+            // file anymore
+            // Remove file from local uploads folder
+            // fs.unlinkSync(locaFilePath);
+
+            return {
+                message: "Success",
+                url: result.url,
+            };
+        })
+        .catch((error) => {
+            // Remove file from local uploads folder
+            // fs.unlinkSync(locaFilePath);
+            return {
+                message: "Fail",
+                error: error,
+            };
+        });
+}
 export const deleteOne = (Model) =>
     catchAsync(async(req, res, next) => {
         const doc = await Model.findByIdAndDelete(req.body.id);
@@ -19,19 +59,39 @@ export const deleteOne = (Model) =>
 
 export const updateOne = (Model) =>
     catchAsync(async(req, res, next) => {
-        if (req.file) req.body.photo = req.file.filename;
+        if (req.file) {
+            var locaFilePath = path.join(__dirname, '../', '/public/img/users', req.file.filename);
+            console.log("Localpath=", locaFilePath);
+            var result = await uploadToCloudinary(locaFilePath);
+
+            console.log("Result Url =", result);
+            req.body.photo = result.url;
+        }
         // const data = {};
         var proofsArray = [];
-        // console.log(req.files);
         // data.imageCover = req.files.imageCover.originalname;
         if (Model != user) {
             if (req.files.proofs != undefined) {
-                req.files.proofs.map((proof) => proofsArray.push(proof.filename));
+                for (var i = 0; i < req.files.proofs.length; i++) {
+                    var locaFilePath = path.join(__dirname, '../', req.files.proofs[i].path);
+                    console.log(locaFilePath);
+                    // Upload the local image to Cloudinary
+                    // and get image url as response
+                    var result = await uploadToCloudinary(locaFilePath);
+                    console.log(result);
+                    proofsArray.push(result.url);
+                }
                 req.body.proofs = proofsArray;
             }
             // console.log(req.body.proofs);
-            if (req.files.imageCover)
-                req.body.imageCover = req.files.imageCover[0].filename;
+            if (req.files.imageCover) {
+                var locaFilePath = path.join(__dirname, '../', '/public/img/funds', req.files.imageCover[0].filename);
+                console.log(locaFilePath);
+                var result = await uploadToCloudinary(locaFilePath);
+                console.log(result);
+                req.body.imageCover = result.url;
+                // req.body.imageCover = req.files.imageCover[0].filename;
+            }
         }
         const doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
             new: true,
@@ -75,7 +135,9 @@ export const createOne = (Model) =>
 
 export const getOne = (Model, popOptions) =>
     catchAsync(async(req, res, next) => {
-        let query = Model.findById(req.params.id).populate(popOptions).select("-__v");
+        let query = Model.findById(req.params.id)
+            .populate(popOptions)
+            .select("-__v");
         // if (popOptions) query = query.populate(popOptions);
 
         // console.log(popOptions);
@@ -94,7 +156,7 @@ export const getOne = (Model, popOptions) =>
             status: "success",
             data: doc,
             MyFunds,
-            user_Transactions
+            user_Transactions,
         });
     });
 
@@ -119,5 +181,15 @@ export const getAll = (Model) =>
             data: {
                 data: doc,
             },
+        });
+    });
+export const Filtered = (Model) =>
+    catchAsync(async(req, res, next) => {
+        console.log(req.query);
+        const doc = await Model.find(req.query);
+        res.status(200).json({
+            status: "success",
+            results: doc.length,
+            data: doc
         });
     });

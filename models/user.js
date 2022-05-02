@@ -16,9 +16,11 @@ const userSchema = new Schema({
     },
     userId: {
         type: Schema.ObjectId,
+        required: true
     },
     dob: {
         type: String,
+        required: true
     },
     address: {
         type: String,
@@ -53,21 +55,6 @@ const userSchema = new Schema({
         type: String,
         default: "default.jpg",
     },
-    cards: [{
-        ac_name: {
-            type: String,
-            required: true,
-        },
-        card_no: {
-            type: String,
-            required: true,
-        },
-        expiry: {
-            type: String,
-            required: true,
-        },
-    }, ],
-    FundedTo: [{ type: mongoose.Schema.Types.ObjectId, ref: "Fund" }],
 }, { timestamps: true }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }

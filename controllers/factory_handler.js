@@ -74,11 +74,12 @@ export const updateOne = (Model) =>
         if (Model != user) {
             if (req.files.proofs != undefined) {
                 for (var i = 0; i < req.files.proofs.length; i++) {
-                    var locaFilePath = req.files.proofs[i].path;
+                    var locaFilePath = path.join(__dirname, '../', req.files.proofs[i].path);
                     console.log(locaFilePath);
                     // Upload the local image to Cloudinary
                     // and get image url as response
                     var result = await uploadToCloudinary(locaFilePath);
+                    console.log(result);
                     proofsArray.push(result.url);
                 }
                 req.body.proofs = proofsArray;
@@ -86,8 +87,7 @@ export const updateOne = (Model) =>
             // console.log(req.body.proofs);
             if (req.files.imageCover) {
                 console.log('/images/users');
-                var locaFilePath =
-                    req.files.imageCover[0].path;
+                var locaFilePath = path.join(__dirname, '../', req.files.imageCover[0].path);
                 console.log(locaFilePath);
                 var result = await uploadToCloudinary(locaFilePath);
                 req.body.imageCover = result.url;

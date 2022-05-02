@@ -85,7 +85,7 @@ export const updateOne = (Model) =>
             }
             // console.log(req.body.proofs);
             if (req.files.imageCover) {
-                var locaFilePath = path.join(__dirname, '../', req.files.imageCover[0].path);
+                var locaFilePath = req.files.imageCover[0].path;
                 console.log(locaFilePath);
                 var result = await uploadToCloudinary(locaFilePath);
                 console.log(result);

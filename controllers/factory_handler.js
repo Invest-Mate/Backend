@@ -105,10 +105,17 @@ export const updateOne = (Model) =>
                 // req.body.imageCover = req.files.imageCover[0].filename;
             }
         }
-        const doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
-            new: true,
-            runValidators: true,
-        });
+        if (Model == user) {
+            const doc = await Model.findByOneAndUpdate({ userId: req.body.id }, req.body, {
+                new: true,
+                runValidators: true,
+            });
+        } else {
+            const doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
+                new: true,
+                runValidators: true,
+            });
+        }
         if (!doc) {
             return next(new AppError("No document found with that ID", 404));
         }
@@ -147,9 +154,15 @@ export const createOne = (Model) =>
 
 export const getOne = (Model, popOptions) =>
     catchAsync(async(req, res, next) => {
-        let query = Model.findById(req.params.id)
-            .populate(popOptions)
-            .select("-__v");
+        if (Model == user) {
+            let query = Model.find({ userId: req.params.id })
+                .populate(popOptions)
+                .select("-__v");
+        } else {
+            let query = Model.findById(req.params.id)
+                .populate(popOptions)
+                .select("-__v");
+        }
         // if (popOptions) query = query.populate(popOptions);
 
         // console.log(popOptions);

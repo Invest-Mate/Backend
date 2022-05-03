@@ -15,7 +15,7 @@ const userSchema = new Schema({
         minlength: [10, "A user name must have more or equal then 10 characters"],
     },
     userId: {
-        type: Schema.ObjectId,
+        type: String,
         required: true
     },
     dob: {
@@ -63,12 +63,12 @@ const userSchema = new Schema({
 //To create a virtual Population of field My Funds
 userSchema.virtual('MyFunds', {
     ref: 'Fund',
-    localField: '_id',
+    localField: 'userId',
     foreignField: 'createdBy',
 });
 userSchema.virtual('User_Transactions', {
     ref: 'Transaction',
-    localField: '_id',
+    localField: 'userId',
     foreignField: 'userId',
 });
 export default mongoose.model("User", userSchema);

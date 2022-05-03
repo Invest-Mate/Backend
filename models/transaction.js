@@ -16,7 +16,7 @@ const transSchema = new Schema({
             type: String,
         },
         userId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             ref: "User",
         },
         trans_id: {

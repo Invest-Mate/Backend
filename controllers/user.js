@@ -11,7 +11,7 @@ import {
 
 export const createUser = createOne(User);
 export const updateUser = updateOne(User);
-export const getUser = getOne(User, { path: 'MyFunds User_Transactions', select: '_id fundId' });
+export const getUser = getOne(User, { path: 'MyFunds User_Transactions', select: 'userId fundId' });
 export const getAllUsers = getAll(User);
 export const deleteUser = deleteOne(User);
 //updating the donor when transaction button is pressed

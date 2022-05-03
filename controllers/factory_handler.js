@@ -2,10 +2,8 @@ import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/appError";
 import user from "../models/user.js";
 import path from "path";
-import { CloudConfig } from "../utils/cloud_config.js";
 const cloudinary = require("cloudinary");
 require("dotenv").config();
-import APIFeatures from "../utils/apiFeatures";
 cloudinary.config({
     cloud_name: process.env.cloud_name,
     api_key: process.env.api_key,
@@ -60,7 +58,12 @@ export const deleteOne = (Model) =>
 export const updateOne = (Model) =>
     catchAsync(async(req, res, next) => {
         if (req.file) {
-            var locaFilePath = path.join(__dirname, '../', '/public/img/users', req.file.filename);
+            var locaFilePath = path.join(
+                __dirname,
+                "../",
+                "/public/img/users",
+                req.file.filename
+            );
             console.log("Localpath=", locaFilePath);
             var result = await uploadToCloudinary(locaFilePath);
 
@@ -73,7 +76,11 @@ export const updateOne = (Model) =>
         if (Model != user) {
             if (req.files.proofs != undefined) {
                 for (var i = 0; i < req.files.proofs.length; i++) {
-                    var locaFilePath = path.join(__dirname, '../', req.files.proofs[i].path);
+                    var locaFilePath = path.join(
+                        __dirname,
+                        "../",
+                        req.files.proofs[i].path
+                    );
                     console.log(locaFilePath);
                     // Upload the local image to Cloudinary
                     // and get image url as response
@@ -85,7 +92,12 @@ export const updateOne = (Model) =>
             }
             // console.log(req.body.proofs);
             if (req.files.imageCover) {
-                var locaFilePath = path.join(__dirname, '../', '/public/img/funds', req.files.imageCover[0].filename);
+                var locaFilePath = path.join(
+                    __dirname,
+                    "../",
+                    "/public/img/funds",
+                    req.files.imageCover[0].filename
+                );
                 console.log(locaFilePath);
                 var result = await uploadToCloudinary(locaFilePath);
                 console.log(result);
@@ -185,11 +197,29 @@ export const getAll = (Model) =>
     });
 export const Filtered = (Model) =>
     catchAsync(async(req, res, next) => {
-        console.log(req.query);
-        const doc = await Model.find(req.query);
+        // console.log("games Searching route")
+        const queryObj = {...req.query }
+        const excludedFields = ["page", "sort", "limit", "fields"]
+        excludedFields.forEach((el) => {
+                delete queryObj[el]
+            })
+            // console.log("quesryobj" + queryObj)
+        const search = queryObj
+        const sort = req.query.sort
+            // console.log("This is search " + search.title)
+            // console.log(sort)
+        var result = search.title
+            // const games=await game.find(search)
+            // .sort({duration:'asc'}).lean()
+        var query
+        if (!(search.title === undefined)) {
+            query = await Model.find({ title: new RegExp("^" + result, "i") })
+        } else {
+            query = await Model.find(queryObj).sort({ createdAt: 1 })
+        }
         res.status(200).json({
             status: "success",
-            results: doc.length,
-            data: doc
+            results: query.length,
+            data: query,
         });
     });

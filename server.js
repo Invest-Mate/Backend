@@ -6,7 +6,6 @@ const app = express();
 const compression = require('compression');
 require("dotenv").config();
 import globalErrorController from "./controllers/error_controller";
-import AppError from "./utils/appError";
 process.on('uncaughtException', err => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message);

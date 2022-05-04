@@ -1,12 +1,17 @@
+const express = require('express');
 import https from "https";
 import qs from "querystring";
 import checksum_lib from "../helpers/checksum";
 import config from "../helpers/config";
+import path from "path";
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded());
 require("dotenv").config();
-const port = process.env.PORT;
 export var data = {};
 export const PaymentForm = (req, res) => {
-    res.sendFile(__dirname + '/index.html')
+    data.user = req.query;
+    res.sendFile(path.join(__dirname, '../', 'views/index.html'));
 };
 export const PayNow = (req, res) => {
     var paymentDetails = {
@@ -113,7 +118,7 @@ export var Callback = (req, res) => {
                         })
                     });
                 });
-
+                // app.post("/create-transaction", createTransaction);
                 // post the data
                 post_req.write(post_data);
                 post_req.end();

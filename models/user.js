@@ -7,6 +7,7 @@ const opts = {
 //To include virtuals in res.json(), you need to set the toJSON schema
 // option to { virtuals: true }.
 const userSchema = new Schema({
+    _id: String,
     name: {
         type: String,
         trim: true,
@@ -15,7 +16,7 @@ const userSchema = new Schema({
         minlength: [10, "A user name must have more or equal then 10 characters"],
     },
     userId: {
-        type: Schema.ObjectId,
+        type: String,
         required: true
     },
     dob: {
@@ -53,7 +54,7 @@ const userSchema = new Schema({
     },
     photo: {
         type: String,
-        default: "default.jpg",
+        default: "http://res.cloudinary.com/fundzer-85/image/upload/v1651636348/xaqnrit2i1yb6xce8jwq.jpg",
     },
 }, { timestamps: true }, {
     toJSON: { virtuals: true },

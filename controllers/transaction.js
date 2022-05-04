@@ -12,14 +12,14 @@ import { data } from "./payment";
 //AGGREGATION STATICS = Amount Collected , No of people alias donations
 
 export const createTransaction = catchAsync(async(req, res, next) => {
-    const { userId, fundId, ip } = req.body;
+    // const { userId, fundId, ip } = req.que;
     var store = {};
     // TXN_AMOUNT: '8768',
     store.amountFunded = parseInt(data.params.TXN_AMOUNT);
     store.trans_id = data.result.TXNID;
-    store.userId = userId;
-    store.fundId = fundId;
-    store.ip = ip;
+    store.userId = data.user.userId;
+    store.fundId = data.user.fundId;
+    store.ip = data.user.ip;
     store.status = data.result.STATUS;
     store.trans_date = data.result.TXNDATE;
     store.trans_name = data.params.CUST_ID;
@@ -27,9 +27,7 @@ export const createTransaction = catchAsync(async(req, res, next) => {
     const doc = await transaction.create(store);
     res.status(201).json({
         status: "success",
-        data: {
-            data: doc,
-        },
+        // data: doc
     });
 });
 export const getAllTransaction = getAll(transaction);

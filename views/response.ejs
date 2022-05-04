@@ -63,68 +63,74 @@
                 <h2>Payment Status</h2>
             </center>
             <div>
-                <table class="table table-borderless">
-                    <tr>
-                        <th>TXNID: </th>
-                        <td>
-                            <%= data.TXNID %>
-                        </td>
+                <form action="/api/transaction/create-transaction" method="post">
+                    <table class="table table-borderless">
                         <tr>
-                            <th>BANKTXNID: </th>
+                            <th>TXNID: </th>
                             <td>
-                                <%= data.BANKTXNID %>
+                                <%= data.TXNID %>
                             </td>
-                        </tr>
-                        <tr>
-                            <th>TXNAMOUNT: </th>
-                            <td>
-                                <%= data.TXNAMOUNT %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>BANKNAME: </th>
-                            <td>
-                                <%= data.BANKNAME %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>GATEWAYNAME: </th>
-                            <td>
-                                <%= data.GATEWAYNAME %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>STATUS: </th>
-                            <td>
-                                <%= data.STATUS %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>RESPCODE: </th>
-                            <td>
-                                <%= data.RESPCODE %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>RESPMSG: </th>
-                            <td>
-                                <%= data.RESPMSG %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>TXNDATE: </th>
-                            <td>
-                                <%= data.TXNDATE %>
-                            </td>
-                        </tr>
-                </table>
+                            <tr>
+                                <th>BANKTXNID: </th>
+                                <td>
+                                    <%= data.BANKTXNID %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>TXNAMOUNT: </th>
+                                <td>
+                                    <%= data.TXNAMOUNT %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>BANKNAME: </th>
+                                <td>
+                                    <%= data.BANKNAME %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>GATEWAYNAME: </th>
+                                <td>
+                                    <%= data.GATEWAYNAME %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>STATUS: </th>
+                                <td>
+                                    <%= data.STATUS %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>RESPCODE: </th>
+                                <td>
+                                    <%= data.RESPCODE %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>RESPMSG: </th>
+                                <td>
+                                    <%= data.RESPMSG %>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>TXNDATE: </th>
+                                <td>
+                                    <%= data.TXNDATE %>
+                                </td>
+                            </tr>
+                    </table>
+                    <div class="form-group">
+                        <button class="btn form-control btn-primary">Proceed</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 <!-- <footer class="footer" ">
 <div>
-    Made by 
-    <a href="https://amljs.github.io " target="_blank ">Amal Jose</a>
+    <button id="post-btn ">Proceed</button>
+    <!-- Made by 
+    <a href="https://amljs.github.io " target="_blank ">Amal Jose</a> -->
 </div>
 </footer> -->

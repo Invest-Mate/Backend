@@ -107,17 +107,17 @@ export const updateOne = (Model) =>
         }
         var doc;
         console.log(req.body);
-        if (Model == user) {
-            doc = await Model.findOneAndUpdate({ userId: req.body.id }, req.body, {
-                new: true,
-                runValidators: true,
-            });
-        } else {
-            doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
-                new: true,
-                runValidators: true,
-            });
-        }
+        // if (Model == user) {
+        //     doc = await Model.findOneAndUpdate({ userId: req.body.id }, req.body, {
+        //         new: true,
+        //         runValidators: true,
+        //     });
+        // } else {
+        doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
+            new: true,
+            runValidators: true,
+        });
+        // }
         if (!doc) {
             return next(new AppError("No document found with that ID", 404));
         }
@@ -157,16 +157,16 @@ export const createOne = (Model) =>
 export const getOne = (Model, popOptions) =>
     catchAsync(async(req, res, next) => {
         var query;
-        if (Model == user) {
-            console.log(popOptions);
-            query = Model.find({ _id: req.params.id })
-                .populate(popOptions)
-                .select("-__v");
-        } else {
-            query = Model.find({ _id: req.params.id })
-                .populate(popOptions)
-                .select("-__v");
-        }
+        // if (Model == user) {
+        console.log(popOptions);
+        query = Model.findById(req.params.id)
+            .populate(popOptions)
+            .select("-__v");
+        // } else {
+        //     query = Model.find({ _id: req.params.id })
+        //         .populate(popOptions)
+        //         .select("-__v");
+        // }
         // if (popOptions) query = query.populate(popOptions);
 
         // console.log(popOptions);

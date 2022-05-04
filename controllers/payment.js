@@ -3,16 +3,15 @@ import https from "https";
 import qs from "querystring";
 import checksum_lib from "../helpers/checksum";
 import config from "../helpers/config";
-import { createTransaction } from "./transaction";
+import path from "path";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 require("dotenv").config();
-const port = process.env.PORT;
 export var data = {};
 export const PaymentForm = (req, res) => {
     data.user = req.query;
-    res.sendFile(__dirname + '/index.html')
+    res.sendFile(path.join(__dirname, '../', 'views/index.html'));
 };
 export const PayNow = (req, res) => {
     var paymentDetails = {

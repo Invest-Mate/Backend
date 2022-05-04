@@ -105,7 +105,7 @@ export const updateOne = (Model) =>
                 // req.body.imageCover = req.files.imageCover[0].filename;
             }
         }
-        var doc;
+        // var doc;
         console.log(req.body);
         // if (Model == user) {
         //     doc = await Model.findOneAndUpdate({ userId: req.body.id }, req.body, {
@@ -113,14 +113,14 @@ export const updateOne = (Model) =>
         //         runValidators: true,
         //     });
         // } else {
-        doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
+        const doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
             new: true,
             runValidators: true,
         });
         // }
-        if (!doc) {
-            return next(new AppError("No document found with that ID", 404));
-        }
+        // if (!doc) {
+        //     return next(new AppError("No document found with that ID", 404));
+        // }
 
         res.status(200).json({
             status: "success",

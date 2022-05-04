@@ -105,13 +105,15 @@ export const updateOne = (Model) =>
                 // req.body.imageCover = req.files.imageCover[0].filename;
             }
         }
+        var doc;
+        console.log(req.body);
         if (Model == user) {
-            const doc = await Model.findByOneAndUpdate({ userId: req.body.id }, req.body, {
+            doc = await Model.findOneAndUpdate({ userId: req.body.id }, req.body, {
                 new: true,
                 runValidators: true,
             });
         } else {
-            const doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
+            doc = await Model.findByIdAndUpdate(req.body.id, req.body, {
                 new: true,
                 runValidators: true,
             });
@@ -154,12 +156,13 @@ export const createOne = (Model) =>
 
 export const getOne = (Model, popOptions) =>
     catchAsync(async(req, res, next) => {
+        var query;
         if (Model == user) {
-            let query = Model.find({ userId: req.params.id })
+            query = Model.find({ userId: req.params.id })
                 .populate(popOptions)
                 .select("-__v");
         } else {
-            let query = Model.findById(req.params.id)
+            query = Model.find({ _id: req.params.id })
                 .populate(popOptions)
                 .select("-__v");
         }

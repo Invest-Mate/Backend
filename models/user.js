@@ -53,7 +53,7 @@ const userSchema = new Schema({
     },
     photo: {
         type: String,
-        default: "default.jpg",
+        default: "http://res.cloudinary.com/fundzer-85/image/upload/v1651636348/xaqnrit2i1yb6xce8jwq.jpg",
     },
 }, { timestamps: true }, {
     toJSON: { virtuals: true },

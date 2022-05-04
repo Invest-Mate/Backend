@@ -27,7 +27,7 @@ export const createTransaction = catchAsync(async(req, res, next) => {
     const doc = await transaction.create(store);
     res.status(201).json({
         status: "success",
-        data: doc
+        // data: doc
     });
 });
 export const getAllTransaction = getAll(transaction);

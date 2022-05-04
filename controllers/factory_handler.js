@@ -158,7 +158,8 @@ export const getOne = (Model, popOptions) =>
     catchAsync(async(req, res, next) => {
         var query;
         if (Model == user) {
-            query = Model.find({ userId: req.params.id })
+            console.log(popOptions);
+            query = Model.find({ _id: req.params.id })
                 .populate(popOptions)
                 .select("-__v");
         } else {

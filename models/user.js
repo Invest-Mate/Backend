@@ -7,6 +7,7 @@ const opts = {
 //To include virtuals in res.json(), you need to set the toJSON schema
 // option to { virtuals: true }.
 const userSchema = new Schema({
+    _id: String,
     name: {
         type: String,
         trim: true,
@@ -63,12 +64,12 @@ const userSchema = new Schema({
 //To create a virtual Population of field My Funds
 userSchema.virtual('MyFunds', {
     ref: 'Fund',
-    localField: 'userId',
+    localField: '_id',
     foreignField: 'createdBy',
 });
 userSchema.virtual('User_Transactions', {
     ref: 'Transaction',
-    localField: 'userId',
+    localField: '_id',
     foreignField: 'userId',
 });
 export default mongoose.model("User", userSchema);
